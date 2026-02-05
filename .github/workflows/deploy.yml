@@ -12,20 +12,27 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 🔥 Validação de HTML (VAI FALHAR)
+      - name: Validate HTML
+        run: |
+          npm install -g htmlhint
+          htmlhint "**/*.html"
+
+      # 🔥 Se chegou aqui, já passou no HTML (o que não vai acontecer)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-      
+          path: "."
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-        
-    - name: Step que falha
-        run: exit 1
