@@ -26,3 +26,6 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+        
+    - name: Step que falha
+        run: exit 1
