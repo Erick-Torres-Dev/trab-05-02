@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Falha - Index com TODO/FIXME/SENHA</title>
+</head>
+<body>
+    <!-- TODO: Corrigir essa seção depois - ISSO VAI FALHAR A PIPELINE! -->
+    
+    <h1>Este é um exemplo de arquivo que faria a CI falhar!</h1>
+    
+    <!-- FIXME: Esse comentário também causa falha -->
+    
+    <p>Se você tentar fazer merge deste arquivo com o index.html real, a pipeline falhará.</p>
+    
+    <!-- Exemplo de termo sensível que causa falha:
+    senha: admin123
+    password: 12345
+    -->
+    
+    <p>Estas são as razões pelas quais a CI bloquearia este arquivo:</p>
+    <ul>
+        <li>✗ TODO encontrado no código</li>
+        <li>✗ FIXME encontrado no código</li>
+        <li>✗ Palavra "senha" encontrada</li>
+        <li>✗ Palavra "password" encontrada</li>
+    </ul>
+    
+    <h2>Como fazer a pipeline falhar (para teste):</h2>
+    <ol>
+        <li>Crie uma branch: git checkout -b teste-falha</li>
+        <li>Copie o conteúdo deste arquivo para index.html</li>
+        <li>Faça commit: git commit -am "Introduz erro no index"</li>
+        <li>Faça push: git push origin teste-falha</li>
+        <li>Abra um Pull Request</li>
+        <li>Observe a pipeline falhar! 🔴</li>
+    </ol>
+    
+    <p>Você verá exatamente qual validação falhou nos logs da Actions.</p>
+</body>
+</html>
