@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages (FAIL MODE)
 
 on:
   push:
@@ -12,17 +12,48 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 🔥 FAIL 1 — Comando inválido
+      - name: Invalid command (fail garantido)
+        run: |
+          comando_que_nao_existe
+
+      # 🔥 FAIL 2 — HTMLHint forçado a falhar
+      - name: Validate HTML (hard fail)
+        run: |
+          set -e
+          npm install -g htmlhint
+          htmlhint "**/*.html"
+          exit 1
+
+      # 🔥 FAIL 3 — Arquivo obrigatório que NÃO existe
+      - name: Check required build file
+        run: |
+          if [ ! -f "dist/index.html" ]; then
+            echo "Arquivo dist/index.html não encontrado"
+            exit 1
+          fi
+
+      # 🔥 FAIL 4 — Erro manual explícito
+      - name: Forced failure
+        run: |
+          echo "Falha proposital de CI/CD"
+          exit 1
+
+      # 🚫 ISSO NUNCA EXECUTA
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-      
+          path: "."
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
